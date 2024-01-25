@@ -37,10 +37,8 @@ export const signin = async(req,res,next)=>{
     const {email, password} = req.body;
 
     if (
-        !username ||
         !email ||
         !password ||
-        username === '' ||
         email === '' ||
         password === ''
       ) {
@@ -54,7 +52,7 @@ try{
         return next(errorHandler(404,'User not found'))
     }
 
-    const validPassword = bcrypt.compareSync(password,user.password)
+    const validPassword = bcrypt.compareSync(password,validUser.password)
 
     if(!validPassword){
         return next(errorHandler(404, 'Password does not match'))
