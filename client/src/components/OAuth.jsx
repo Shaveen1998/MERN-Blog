@@ -7,19 +7,18 @@ import {useDispatch } from "react-redux";
 import { SignInSuccess } from "../redux/user/userSlice";
 
 function OAuth() {
-
-
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
     const auth = getAuth(app)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const handleGoogleClick = async()=>{
+    const handleGoogleClick = async () =>{
 
         const provider = new GoogleAuthProvider()
         provider.setCustomParameters({ prompt: 'select_account' })
 
         try {
             const resultsFromGoogle = await signInWithPopup(auth, provider)
+            console.log(resultsFromGoogle)
             const res = await fetch('/api/auth/google', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -29,18 +28,15 @@ function OAuth() {
                     googlePhotoUrl: resultsFromGoogle.user.photoURL,
                 }),
                 })
-
-                const data = await res.json()
-                if (res.ok){
-                    dispatch(SignInSuccess(data))
-                    navigate('/')
-                }
-
+            const data = await res.json()
+            if (res.ok){
+                dispatch(SignInSuccess(data))
+                navigate('/')
+            }
         } catch (error) {
-            console.log(error);
+            console.log('this is the error',error);
         }
     } 
-
   return (
     <Button type='button' gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick}>
         <AiFillGoogleCircle className='w-6 h-6 mr-2'/>
