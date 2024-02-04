@@ -8,6 +8,7 @@ import Projects from './pages/Projects'
 import Header from './components/Header'
 import FooterCom from './components/Footer'
 import { useSelector } from 'react-redux'
+import CreatePost from './pages/CreatePost'
 
 export default function App() {
 
@@ -24,6 +25,9 @@ const {currentUser} = useSelector(state=> state.user)
       <Route 
         path="/dashboard" 
         element={currentUser? <Dashboard />: <Navigate to='/signin'/>}/>
+      <Route 
+        path="/create-post" 
+        element={currentUser && currentUser.isAdmin? <CreatePost />: <Navigate to='/signin'/>}/>
       <Route path="/projects" element={<Projects />}/>    
     </Routes>
     <FooterCom />

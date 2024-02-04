@@ -1,9 +1,10 @@
 import { TextInput, Button, Alert, Modal } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {Link} from 'react-router-dom'
 // import { CircularProgressbar } from 'react-circular-progressbar';
 // import 'react-circular-progressbar/dist/styles.css';
-import { updateFailure, updateStart, updateSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, signoutSuccess } from "../redux/user/userSlice";
+import { updateFailure, updateStart, updateSuccess, deleteUserFailure, deleteUserStart, deleteUserSuccess, SignoutSuccess } from "../redux/user/userSlice";
 import {
   getDownloadURL,
   getStorage,
@@ -16,7 +17,7 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashProfile() {
 
-    const { currentUser } = useSelector((state) => state.user);
+    const { currentUser, loading, error } = useSelector((state) => state.user);
     const [imageFileUrl, setImageFileUrl] = useState(null)
     const [imageFile, setImageFile] = useState(null)
     const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -151,7 +152,7 @@ export default function DashProfile() {
         if (!res.ok) {
           console.log(data.message);
         } else {
-          dispatch(signoutSuccess());
+          dispatch(SignoutSuccess());
         }
       } catch (error) {
         console.log(error.message);
@@ -197,9 +198,26 @@ export default function DashProfile() {
            <TextInput type="text" id="username" placeholder="username" defaultValue={currentUser.username} onChange={handleChange}/>
            <TextInput type="text" id="email" placeholder="email" defaultValue={currentUser.email} onChange={handleChange}/>
            <TextInput type="password" id="password" placeholder="password" onChange={handleChange} />
-            <Button type="submit" gradientDuoTone = 'purpleToBlue' outline>
-                Update
+           <Button
+                type='submit'
+                gradientDuoTone='purpleToBlue'
+                outline
+                disabled={loading || imageFileUploading}
+              >
+                {loading ? 'Loading...' : 'Update'}
             </Button>
+
+            {currentUser.isAdmin && (
+          <Link to={'/create-post'}>
+            <Button
+              type='button'
+              gradientDuoTone='purpleToPink'
+              className='w-full'
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
 
         </form>
 
@@ -211,6 +229,11 @@ export default function DashProfile() {
       {updateError && (
         <Alert color='failure' className='mt-5'>
           {updateError}
+        </Alert>
+      )}
+       {error && (
+        <Alert color='failure' className='mt-5'>
+          {error}
         </Alert>
       )}
 

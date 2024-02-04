@@ -66,12 +66,8 @@ export const updateUser = async (req, res, next) => {
    
   }
 
-  export const signoutUser = async(re,res,next)=>{
-    const {userId} = req.params
-    if(req.user.id !== userId){
-      return next(errorHandler(401, 'You are not allowed to signout'))
-    }
-
+  export const signoutUser = async(req,res,next)=>{
+    
     try{
       res.clearCookie('access_token').status(200).json('User had been signed out')
       
