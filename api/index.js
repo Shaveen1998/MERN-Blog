@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import userRoute from './routes/userRoutes.js'
 import authRoute from './routes/authRoutes.js'
 import cookieParser from 'cookie-parser'
+import postRoute  from './routes/postRoutes.js'
 
 const app = express()
 
@@ -23,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
 })
 
 app.use('/api/user' , userRoute)
-
+app.use('/api/post' , postRoute)
 app.use('/api/auth' , authRoute)
 
 app.use((err,req,res,next)=>{
